@@ -2,11 +2,12 @@
 
 A scaling, monitored, distributed-ready, realtime, persistent infrastructure-creator.  Take control over your IAAS.
 
-**PRE ALPHA-WARE**, not ready, being ported!  
+**PRE ALPHA-WARE**, not ready, being ported! 
+
 
 ## Why
 
-1. Any code that was written for yc-boostrap, or external service used (cassandra.io), was primarily used on a monetary basis.  You can always scale up if you don't fail.
+1. Any code that was written for yc-boostrap, or external service used (cassandra.io), was done on a monetary basis.  You can always scale up if you don't fail.
 
 1. PAAS are great, but expensive (just look at the added cost of Heroku add-ons, or Chef hosting).  If you have a basic knowledge of AWS services, you can handle issues that arise.
 
@@ -14,29 +15,9 @@ A scaling, monitored, distributed-ready, realtime, persistent infrastructure-cre
 
 1. Puppet/Chef/CloudFormation are kind of a pain in the ass; let's stick to Bash basics.
 
-## Gisting
+## Giants
 
-```
-cd /home/ubuntu
-
-# Git + setup
-gist_id=<id>
-yes | apt-get install git
-git clone https://<username>:<password>@github.com/gist/$gist_id.git
-chmod a+x $gist_id/*
-source $gist_id/credentials.sh # is extended by
-  source $gist_id/common_utils.sh # is extended by
-    source $gist_id/base_setup.sh # is extended by this
-
-# Install API on every box
-install_play_framework
-  git_repo <my-play-app>
-  install_play_framework_app /home/ubuntu/<my-play-app>
-    monitor_new_service <my-play-app>
-
-# Account for changes
-rm -r $gist_id && shutdown -r now
-```
+First and fore-most, I've perfected this from m2m.io environment setup.
 
 ## Pre-reqs
 
@@ -65,7 +46,7 @@ Creates Gists for versioned instance setups based on input credentials.
 Spings up this with AWS user-data which pulls Gists.
 
 Loadbalancer -> 2 Webservers/API -> MQdb (3 'Redis) cassandra.io
-                        |
+                  |
                         ^
      Socket.io <- Either of boxes -> Socket.io
 
@@ -73,7 +54,39 @@ Create alarms in CloudWatch to auto-scale webserver based on traffic.  Uses humm
 
 Backs-up to S3
 
-### Process flow
-When you bootstrap, we initially push all the scripts in `gists/` to your Github account under the name `aws-bootstrap`.
-Next, we create AMIs for your webserver, api, distributed cache, and realtime instances by using the Gists as user-data.  
-When the AMIs are finished, we'll launch the instances via CloudWatch and create all the alarms to auto-scale the webserver and api.
+## Gisting
+
+```
+cd /home/ubuntu
+
+# Git + setup
+gist_id=<id>
+yes | apt-get install git
+git clone https://<username>:<password>@github.com/gist/$gist_id.git
+chmod a+x $gist_id/*
+source $gist_id/credentials.sh # is extended by
+  source $gist_id/common_utils.sh # is extended by
+    source $gist_id/base_setup.sh # is extended by this
+
+# Install API on every box
+install_play_framework
+  git_repo <my-play-app>
+  install_play_framework_app /home/ubuntu/<my-play-app>
+    monitor_new_service <my-play-app>
+
+# Account for changes
+rm -r $gist_id && shutdown -r now
+```
+
+### Technical
+
+ -> Submit Github + Twilio + AWS credentials (phone #'s?), generate unique credentials on (my) server-side and pass to Gists.
+ -> Launch a monitoring/admin/ci instance w/ an Elastic IP.  Configure the instance. 
+   -> Add the Gists to the Github account.
+   -> Create Security Groups for each type of instance.
+   -> Create SSH keys for each type of instance, upload to S3.
+   -> Create SNS topics for each type of alarm (3 types) (auto-subscribe to subscriptions from admin).
+   -> Launch AMI instances for each type based on Gists.
+   -> Poll until all the AMIs are listed in EC2/uploaded to S3.
+     -> On complete, create AutoScaling groups, starting with API.
+     -> Launch AutoScaling groups with CloudWatch alarm subscriptions pointed at Elastic IP.

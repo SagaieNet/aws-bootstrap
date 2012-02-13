@@ -4,7 +4,7 @@
 setup_instance() {
   apt-get update
   get_ec2_metadata
-  add_to_bashrc "gist_id" $gist_id
+  add_to_bashrc "gist" $gist
   add_keypair_to_profile
   add_multiverse
   apt-get update
