@@ -1,15 +1,6 @@
 Helper = function () {
 
 };
-Helper.prototype.validateEmail = function () {
- 
-};
-Helper.prototype.validateAwsCredentials = function () {
- 
-};
-Helper.prototype.validateGithubCredentials = function () {
-
-};
 Helper.prototype.removeEmptyLinesFromGists = function(file) {
   var str = file.value;
   while(str.indexOf("\r\n\r\n") >= 0) {

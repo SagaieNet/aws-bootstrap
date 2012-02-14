@@ -80,13 +80,13 @@ rm -r $gist_id && shutdown -r now
 
 ### Technical
 
- -> Submit Github + Twilio + AWS credentials (phone #'s?), generate unique credentials on (my) server-side and pass to Gists.
- -> Launch a monitoring/admin/ci instance w/ an Elastic IP.  Configure the instance. 
-   -> Add the Gists to the Github account.
-   -> Create Security Groups for each type of instance.
-   -> Create SSH keys for each type of instance, upload to S3.
-   -> Create SNS topics for each type of alarm (3 types) (auto-subscribe to subscriptions from admin).
-   -> Launch AMI instances for each type based on Gists.
-   -> Poll until all the AMIs are listed in EC2/uploaded to S3.
-     -> On complete, create AutoScaling groups, starting with API.
-     -> Launch AutoScaling groups with CloudWatch alarm subscriptions pointed at Elastic IP.
+1. Submit Github + Twilio + AWS credentials (phone #'s?), generate unique credentials on (my) server-side and pass to Gists.
+1. Launch a monitoring/admin/ci instance w/ an Elastic IP.  Configure the instance. 
+1. Add the Gists to the Github account.
+1. Create Security Groups for each type of instance.
+1. Create SSH keys for each type of instance, upload to S3.
+1. Create SNS topics for each type of alarm (3 types) (auto-subscribe to subscriptions from admin).
+1. Launch AMI instances for each type based on Gists.
+1. Poll until all the AMIs are listed in EC2/uploaded to S3.
+1. On complete, create AutoScaling groups, starting with API.
+1. Launch AutoScaling groups with CloudWatch alarm subscriptions pointed at Elastic IP.
