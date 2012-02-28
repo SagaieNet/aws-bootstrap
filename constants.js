@@ -4,4 +4,4 @@ function define(name, value) {
     enumerable: true
   });
 }
-define('subfolder', 'yc-bootstrap/');
+define('subfolder', 'aws-bootstrap/');

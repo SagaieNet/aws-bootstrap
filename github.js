@@ -1,8 +1,5 @@
 var rest = require('restler');
-Github = function (credentials, constants, helper) {
-  this.credentials = credentials;
-  this.constants = constants;
-  this.helper = helper;
+Github = function (credentials) {
   this.creds = credentials.github_username + ':' + credentials.github_password;
 };
 Github.prototype.getGists = function (callback) {
@@ -27,17 +24,20 @@ Github.prototype.getGistContent = function (id, callback) {
   });
 };
 Github.prototype.addGists = function (description, public, files, callback) {
-  var url = 'https://' + this.creds + '@api.github.com/gists';
   var gist = {};
   gist['description'] = description;
   gist['public'] = public;
-  gist['files'] = {
-    
-  };
-  rest.post(url, {
-    data: gist
+  gist['files'] = {};
+  for (var name in files) {
+    console.log('Script: ' + name + ', Content: ' + escape(files[name]));
+    gist['files'][name] = {};
+    gist['files'][name]['content'] = files[name];
+  }
+  rest.post('https://' + this.creds + '@api.github.com/gists', {
+    data: JSON.stringify(gist)
   }).on('complete', function (response) {
-    callback(response);
+    console.log('Gist ID: ' + response.id);
+    callback(response.id);
   });
 };
 exports.Github = Github;

@@ -1,3 +1,5 @@
+require('./setup');
+
 var fs = require('fs'), 
   github = require('../github');
 github = new github.Github();
