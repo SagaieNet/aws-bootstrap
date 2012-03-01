@@ -28,6 +28,25 @@ Bootstrap.prototype.addGistsToGithub = function (path) {
     });
   })
 };
+Bootstrap.prototype.launchAdminApiInstance = function () {
+
+};
 Bootstrap.prototype.createAMIInstances = function () {
+
+};
+Bootstrap.prototype.launchRedisInstances = function () {
+
+};
+Bootstrap.prototype.launchRealtimeInstances = function () {
+
+};
+Bootstrap.prototype.launchApiInstances = function () {
+
+};
+Bootstrap.prototype.launchWebserverInstances = function () {
+
+};
+Bootstrap.prototype.killDashNine = function () {
+
 };
 exports.Bootstrap = Bootstrap;

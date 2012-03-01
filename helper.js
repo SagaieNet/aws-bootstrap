@@ -1,9 +1,6 @@
 Helper = function () {
 
 };
-Helper.prototype.test = function() {
-  console.log('TEST');
-};
 Helper.prototype.removeEmptyLinesFromGists = function(file) {
   var str;
   str = file.value;
@@ -13,8 +10,7 @@ Helper.prototype.removeEmptyLinesFromGists = function(file) {
   file.value = str;
 };
 Helper.prototype.readFileContents = function(file) {
-  var fs;
-  fs = require('fs');
+  var fs = require('fs');
   /* Blocking */
   try {
     return fs.readFileSync(file, 'ascii');

@@ -1,6 +1,5 @@
-var knox = require('knox'),
-  fs = require('fs');
 S3 = function (credentials, constants, helper) {
+  var knox = require('knox');
   this.credentials = credentials;
   this.constants = constants;
   this.helper = helper;
@@ -11,7 +10,7 @@ S3 = function (credentials, constants, helper) {
   });
 };
 S3.prototype.put = function (file, name) {
-  var self = this;
+  var self = this, fs = require('fs');
   fs.readFile(file, function (error, buffer) {
     if (error) console.log('Error putting file: ' + error);
     var request = self.client.put(this.constants.subfolder + name, {

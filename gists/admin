@@ -1,24 +1,20 @@
-cd /home/ubuntu
+#!/bin/bash
 
-# TESTING
-username="username"
-password="password"
+cd /home/ubuntu
 
 # Git + setup
 type=admin
+gist=$1
 yes | apt-get install git
 git clone https://$username:$password@github.com/gist/$gist.git
 chmod a+x $gist/*
-source $gist/credentials.sh # is extended by
-  source $gist/common_utils.sh # is extended by
-    source $gist/base_setup.sh # is extended by this
+source $gist/credentials # is extended by
+  source $gist/common # is extended by
+    source $gist/base # is extended by this
 
 setup_instance >> setup_instance.log 2>&1
 
 # Install instance-specific packages and applications
-git_bootstrap_repo
-  add_upstart_job $type "node /home/ubuntu/yc-bootstrap/$type/application.js"
-  monitor_new_service $type
-  
-# Bootstrap
-run_bootstrap >> yc_bootstrap.log 2>&1
+install_admin
+  add_upstart_job $type "node /home/ubuntu/aws-bootstrap/$type/application.js"
+  monitor_new_service application.js

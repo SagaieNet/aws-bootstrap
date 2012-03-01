@@ -1,9 +1,8 @@
-var rest = require('restler');
 Github = function (credentials) {
   this.creds = credentials.github_username + ':' + credentials.github_password;
 };
 Github.prototype.getGists = function (callback) {
-  var url = 'https://' + this.creds + '@api.github.com/users/' + this.username + '/gists';
+  var rest = require('restler'), url = 'https://' + this.creds + '@api.github.com/users/' + this.username + '/gists';
   rest.get(url).on('complete', function (response) {
     response.forEach(function (gist) {
       console.log('ID: ' + gist.id); 
@@ -14,7 +13,7 @@ Github.prototype.getGists = function (callback) {
   });
 };
 Github.prototype.getGistContent = function (id, callback) {
-  var url = 'https://' + this.creds + '@api.github.com/gists/' + id;
+  var rest = require('restler'), url = 'https://' + this.creds + '@api.github.com/gists/' + id;
   rest.get(url).on('complete', function (response) {
     var scripts = {};
     for (var file in response.files) {
@@ -24,10 +23,9 @@ Github.prototype.getGistContent = function (id, callback) {
   });
 };
 Github.prototype.addGists = function (description, public, files, callback) {
-  var gist = {};
+  var rest = require('restler'), gist = {}, gist['files'] = {}, url = 'https://' + this.creds + '@api.github.com/gists';
   gist['description'] = description;
   gist['public'] = public;
-  gist['files'] = {};
   for (var name in files) {
     console.log('Script: ' + name + ', Content: ' + escape(files[name]));
     gist['files'][name] = {};

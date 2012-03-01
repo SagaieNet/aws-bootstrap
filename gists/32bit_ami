@@ -3,7 +3,7 @@
 cd /home/ubuntu
 
 # Git + setup
-type=api
+type="32bit_ami"
 gist=$1
 yes | apt-get install git
 git clone https://$username:$password@github.com/gist/$gist.git
@@ -14,11 +14,9 @@ source $gist/credentials # is extended by
 
 setup_instance >> setup_instance.log 2>&1
 
-# Install instance-specific packages and applications
-install_api
-  add_upstart_job $type "node /home/ubuntu/aws-bootstrap/$type/application.js"
-  monitor_new_service application.js
-
 # Bundle AMI
-ami_name="$github_account_name-$type-ami"
-build_ami $ami_name >> build_ami.log 2>&1
+ami="$github_account_name-$type"
+build_ami $ami >> build_ami.log 2>&1
+
+# Terminate
+curl "http://$2/aws/ec2/terminate/$instanceId"

@@ -14,5 +14,5 @@ app.configure(function () {
 });  
 require('../common/dao')(app);
 require('../common/auth')(app);
-require('./admin')(app);
+require('./api')(app);
 app.listen(80);
