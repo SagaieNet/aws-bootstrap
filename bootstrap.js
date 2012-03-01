@@ -1,32 +1,20 @@
-var walker = require('walker'),
-  github = require('./github'),
-    credentials = require('./credentials'),
-      constants = require('./constants'),
-        helper = require('./helper');
-github = new github.Github(credentials);
+var credentials = require('./credentials'),
+  constants = require('./constants'),
+    helper = require('./helper');
 helper = new helper.Helper(helper);
 Bootstrap = function () {
 
 };
 Bootstrap.prototype.addGistsToGithub = function (path) {
-  var files = {};
+  var github = require('./github');
+  github = new github.Github(credentials);
   if (!path)
     path = 'gists/';
-  walker(path).filterDir(function (dir, stat) {
-    return true;
-  }).on('file', function (file, stat) {
-    var name;
-    name = file.substr(9, file.length);
-    console.log('Got gist: ' + name);
-    files[name] = helper.readFileContents(file);
-  }).on('error', function (er, entry, stat) {
-    console.log('Error ' + er + ' on entry ' + entry);
-  }).on('end', function () {
-    console.log('All Gists traversed.');
+  helper.getGistsToAdd(path, function(files) {
     github.addGists('bootstrap', 'false', files, function(response) {
-   
+      // this.launchAdminApiInstance();
     });
-  })
+  });
 };
 Bootstrap.prototype.launchAdminApiInstance = function () {
 

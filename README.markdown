@@ -4,14 +4,13 @@ A scaling, monitored, distributed-ready, realtime, persistent infrastructure-cre
 
 **PRE ALPHA-WARE**, not ready, being ported! 
 
-
-## Why
+## Why?
 
 1. It should be about the idea and service, not about the infrastructure. 
 
 1. PAAS are great, but expensive (just look at the added cost of Heroku add-ons, or Chef hosting).  If you have a basic knowledge of AWS services, you can handle issues that arise.
 
-1. Puppet/Chef/CloudFormation are kind of a pain in the ass; let's stick to Bash basics and **extend** our scripts with sourcing.
+1. Puppet/Chef/CloudFormation are kind of a pain in the ass; let's stick to Bash basics and **extend** our scripts with sourcing.  Since we're not deploying to multiple instance types, e.g. Ubuntu 11.10 x64 and x386 instances, we don't need to worry about UNIX command differences.  
 
 ## All-powerful Gists
 
