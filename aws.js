@@ -20,35 +20,43 @@ Aws.prototype.createKeyPair = function(keyName) {
   });
   this.ec2.execute();
 };
-Aws.prototype.createSecurityGroup = function(name, ports, ips, groups) {
+Aws.prototype.createSecurityGroups = function(securityGroups) {
   var self = this, request = {}, permissions = 1;
-  request['GroupName'] = name;
-  ips.forEach(function(ip) {
-    console.log('Adding authorized IP: ' + ip + ', with ports:');
-    request['IpPermissions.1.IpProtocol'] = 'tcp';
-    for (var i in ports) {
-      console.log(i + '-' + ports[i]);
-      request['IpPermissions.' + String.valueOf(permissions) + '.FromPort'] = i;
-      request['IpPermissions.' + String.valueOf(permissions) + '.ToPort'] = ports[i];
+  for (var i in securityGroups) {  
+    console.log('Adding security group: ' + securityGroups[i].name);
+    console.log('Permission count: ' + permissions);
+    request['GroupName'] = securityGroups[i].name;
+    for (var j in securityGroups[i].ports) {
+      console.log('With port range: ' + j + '-' + securityGroups[i].ports[j]);
     }
-    request['IpPermissions.n.IpRanges.m.CidrIp'] = ip;
+    securityGroups[i].ips.forEach(function(ip) {
+      console.log('Adding authorized IP: ' + ip + ', with ports:');
+      request['IpPermissions.' + String.valueOf(permissions) + '.IpProtocol'] = 'tcp';
+      for (var k in securityGroups[i].ports) {
+        console.log(k + '-' + securityGroups[i].ports[k]);
+        request['IpPermissions.' + String.valueOf(permissions) + '.FromPort'] = k;
+        request['IpPermissions.' + String.valueOf(permissions) + '.ToPort'] = securityGroups[i].ports[k];
+      }
+      request['IpPermissions.' + String.valueOf(permissions) + '.IpRanges.m.CidrIp'] = ip;
+    });
+    securityGroups[i].groups.forEach(function(group) {
+      console.log('With allowed group: ' + group);
+      request['IpPermissions.' + String.valueOf(permissions) + '.IpProtocol'] = 'tcp';
+      for (var k in securityGroups[i].ports) {
+        console.log(k + '-' + securityGroups[i].ports[k]);
+        request['IpPermissions.' + String.valueOf(permissions) + '.FromPort'] = k;
+        request['IpPermissions.' + String.valueOf(permissions) + '.ToPort'] = securityGroups[i].ports[k];
+      }
+      request['IpPermissions.' + String.valueOf(permissions) + '.Groups.m.GroupName'] = group; 
+    });
     permissions++;
-  });
-  groups.forEach(function(group) {
-    request['IpPermissions.1.IpProtocol'] = 'tcp';
-    for (var i in ports) {
-      request['IpPermissions.' + String.valueOf(permissions) + '.FromPort'] = i;
-      request['IpPermissions.' + String.valueOf(permissions) + '.ToPort'] = ports[i];
-    }
-    request['IpPermissions.n.Groups.m.GroupName'] = group; 
-    permissions++;
-  });
+  };
   for (var i in request) {
-    console.log('Reqeust key: ' + i + ', value: ' + request[i]);
+    console.log('Request: ' + i + ', value: ' + request[i]);
   }
   this.ec2.call('AuthorizeSecurityGroupIngress', request, function (response) {
-     var securityGroupId = response.instancesSet[0].securityGroupId;
-     console.log('securityGroupId: ' + securityGroupId);
+    var securityGroupId = response.instancesSet[0].securityGroupId;
+    console.log('securityGroupId: ' + securityGroupId);
   });
   this.ec2.execute();
 };

@@ -74,19 +74,7 @@ Bootstrap.prototype.createSecurityGroups = function () {
       groups: allowedGroups
     }
   ];  
-  for (var i in securityGroups) {  
-    console.log('Adding security group: ' + securityGroups[i].name);
-    for (var j in securityGroups[i].ports) {
-      console.log('With port range: ' + j + '-' + securityGroups[i].ports[j]);
-    }
-    securityGroups[i].ips.forEach(function(ip) {
-      console.log('With allowed IP: ' + ip);
-    });
-    securityGroups[i].groups.forEach(function(group) {
-      console.log('With allowed group: ' + group);
-    });
-    aws.createSecurityGroup(securityGroups[i].name, securityGroups[i].ports, securityGroups[i].ips. securityGroups[i].groups);
-  };
+  aws.createSecurityGroups(securityGroups);
 };
 Bootstrap.prototype.launchAdminApiInstance = function () {
 
