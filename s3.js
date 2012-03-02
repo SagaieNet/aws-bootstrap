@@ -1,8 +1,7 @@
-S3 = function (credentials, constants, helper) {
+S3 = function (credentials, constants) {
   var knox = require('knox');
   this.credentials = credentials;
   this.constants = constants;
-  this.helper = helper;
   this.client = knox.createClient({
     key: credentials.aws_key,
     secret: credentials.aws_secret,
@@ -12,7 +11,8 @@ S3 = function (credentials, constants, helper) {
 S3.prototype.put = function (file, name) {
   var self = this, fs = require('fs');
   fs.readFile(file, function (error, buffer) {
-    if (error) console.log('Error putting file: ' + error);
+    if (error) 
+      console.log('Error putting file: ' + error);
     var request = self.client.put(this.constants.subfolder + name, {
       'Content-Length': buffer.length,
       'Content-Type': 'text/plain'
@@ -23,6 +23,17 @@ S3.prototype.put = function (file, name) {
     });
     request.end(buffer);
   });
+};
+S3.prototype.putString = function(content, name) {
+  var request = this.client.put(this.constants.subfolder + name, {
+    'Content-Length': content.length,
+    'Content-Type': 'text/plain'
+  });
+  request.on('response', function (response) {
+    console.log('Status: ' + response.statusCode);
+    console.log('Endpoint: ' + request.url);
+  });
+  request.end(content);
 };
 S3.prototype.get = function (object) {
   this.client.get(this.constants.subfolder + object).on('response', function (response) {

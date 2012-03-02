@@ -9,7 +9,8 @@
     "cloudwatch",
     "ec2",
     "github",
-    "gist"
+    "gist",
+    "node-ec2"
   ],
   "repository":"git://github.com/franklovecchio/aws-bootstrap.git",
   "author":"Frank LoVecchio <franklovecchio@gmail.com> (http://franklovecchio.com)",
